@@ -12,17 +12,22 @@
 #include "City.hpp"
 
 City::City(string cityName){
+    string fileName = cityName + ".txtx";
     theCityName = cityName;
-    string fileName = cityName + ".txt";
-    ofstream fout(fileName, ios::in);
-    fout.open(fileName);
-    for(int x = 0; x<citizenList.size(); x++){
-        fout << citizenList[x];
+    ifstream fin(fileName, ios::out);
+    fin.open(fileName);
+    for (int x = 0; !fin.eof(); x++){
+        fin>>citizenList[x];
     }
-    fout.close(fileName);
 }
 City::~City(){
-    
+    string fileName = theCityName + ".txt";
+    ofstream fout(fileName, ios::in);
+    fout.open(fileName);
+    for (int x = 0; x<citizenList.size(); x++){
+        fout << citizenList[x];
+    }
+    fout.close();
 }
 string City::getCityName(){
     return theCityName;
@@ -37,9 +42,19 @@ void City::addCitizen(Citizen *citizen){
     citizenList.push_back(citizen);
 }
 Citizen* City::getCitizenWithId(int id){
-    
+    for (int x = 0; x<citizenList.size(); x++){
+        if (citizenList[x]->getId() == id){
+            return citizenList[x];
+        }
+    }
+    return citizenList[0];
 }
 vector<Citizen*> City::getCitizensForFavoriteColor(string color){
     vector<Citizen*> citizenColor;
-    
+    for (int x = 0; x<citizenList.size(); x++){
+        if (citizenList[x]->getFavoriteColor() == color){
+            citizenColor.push_back(citizenList[x]);
+        }
+    }
+    return citizenColor;
 }
